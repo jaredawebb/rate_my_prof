@@ -1,0 +1,12 @@
+date - the dat the review was posted
+forcredit - was the class taken for credit? (Yes/No)
+attendance - did the professor require attendance? (Mandatory/Not Mandatory)
+textbookuse - how often was the textbook needed? (several options)
+interest - how interested in the subject was the rater? (several options)
+grade - the grade the rater received in the course? (A, B, C, etc.)
+tags - a list of tags chosen by the rater (several options, multiple selections possible)
+comments - a piece of text written by the rater
+helpcount - the number of people who found the rating helpful
+nothelpcount - the number of people who did not find the rating helpful
+tid - unique id for professor
+dept - academic department
