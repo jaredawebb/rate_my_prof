@@ -7,13 +7,13 @@ import numpy as np
 
 # First choose whether you are doiing this on a sample
 # or on the whole data set.
-'''
+
 datafile1 = './sample/sample_train.csv'
 datafile2 = './sample/sample_test.csv'
 '''
 datafile1 = './data/newtrain.csv'
 datafile2 = './data/newtest.csv'
-
+'''
 # Prepare the data for xgboost and randomforest
 print("Prepping Data")
 Xtrain = pd.read_csv(datafile1)

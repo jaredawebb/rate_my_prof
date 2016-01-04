@@ -19,5 +19,5 @@ sampled_df = df.ix[rows]
 other_df = df.drop(rows)
 
 # Save the files.
-sampled_df.to_csv('./sample/sample_train.csv')
-other_df.to_csv('./sample/sample_test.csv')
+sampled_df.to_csv('./sample/sample_train.csv', index=False)
+other_df.to_csv('./sample/sample_test.csv', index=False)

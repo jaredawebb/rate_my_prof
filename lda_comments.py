@@ -6,13 +6,14 @@ import lda
 import numpy as np
 
 # Choose file to pull comments from
-
+'''
 datafile1 = './sample/sample_train.csv'
 datafile2 = './sample/sample_test.csv'
+sample = True
 '''
 datafile1 = './data/newtrain.csv'
 datafile2 = './data/newtest.csv'
-'''
+sample = False
 
 # The stop words file gives a list of words that we
 # do not want to consider in our analysis.
@@ -22,11 +23,11 @@ stop_words = './stop_words.txt'
 print('Reading Data')
 with open(stop_words, 'r') as f:
 	words = f.read()
-	words = words[:-1].split('\n') 
+	words = words.split('\n')[:-1]
 
 # The count vectorizer object will give a document-word matrix of the bigrams
 # present in the text.
-count_vec = CountVectorizer(min_df=120, ngram_range=(1,2), stop_words=words)
+count_vec = CountVectorizer(min_df=10, ngram_range=(1,2), stop_words=words)
 
 # Load the datafiles with pandas
 df_comm1 = pd.read_csv(datafile1, usecols=['id', 'comments'])
@@ -54,8 +55,8 @@ picke.dump(count_vec.get_feature_names(), open(datafile[:-4] + '_feature_names.p
 
 # Use LDA to find topic distributions in comments.
 print('Running LDA')
-n_topics=100
-model = lda.LDA(n_topics=n_topics, n_iter=100, random_state = 1)
+n_topics=150
+model = lda.LDA(n_topics=n_topics, n_iter=50, random_state = 1)
 model = model.fit(cv_comm)
 
 # print most likely words in each topic distributions.
@@ -66,9 +67,9 @@ for i, topic_dist in enumerate(topic_word):
 	topic_words = vocab[np.argsort(topic_dist)][:-(n_top_words+1):-1]
 	print('Topic {}: {}'.format(i, ' '.join(topic_words)))
 
-########################################################
-# Train a ridge regression with the topic distributions.
-########################################################
+##########################################################
+# Train a ridge regression with the topic distributions. #
+##########################################################
 
 print('Training Ridge Regression')
 Ytrain = pd.read_csv(datafile1, usecols=['quality'])  # We want to train against quality
@@ -78,17 +79,29 @@ cl = sklearn.linear_model.Ridge()
 doc_topic = model.doc_topic_
 
 # Fit on the training set.
-cl.fit(doc_topic[:len(df_comm1)], np.array(Ytrain))
+f_data = pd.read_csv('./data/newtrain.csv')
+f_data.drop(['id', 'tid', 'helpfulness', 'clarity', 'easiness','comments', 'quality'], axis=1, inplace=True)
+f_data.replace(to_replace='nan', value=0, inplace=True)
+
+final_data = np.hstack((np.array(doc_topic[:len(df_comm1)]), np.array(f_data))) 
+
+cl.fit(final_data, np.array(Ytrain))
 
 # Now predict on the test set.
 print('Predicting')
-Yhat = cl.predict(doc_topic[len(df_comm1):])
+f_data = pd.read_csv('./data/newtest.csv')
+f_data.drop(['comments', 'id', 'tid'], axis=1, inplace=True)
+f_data.replace(to_replace='nan', value=0, inplace=True)
+
+final_data = np.hstack((np.array(doc_topic[len(df_comm1):]), np.array(f_data)))
+
+Yhat = cl.predict(final_data)
 
 # This data frame matches the topic numbers to their
 # learned coefficients in the ridge regression.
 
 df = pd.DataFrame(data={'topics':range(n_topics),
-                        'coef':cl.coef_.flatten()
+                        'coef':cl.coef_.flatten()[:n_topics]
                     })  
 df.sort('coef',ascending=False,inplace=True)
 nums_array = np.array(df.topics)
@@ -111,3 +124,37 @@ for i, topic_dist in enumerate(topic_word[df.topics[-5:]]):
 # Save results in kaggle format
 submit = pd.DataFrame(data={'id': df_comm2.id, 'quality': np.ravel(Yhat)})
 submit.to_csv('./submissions/submit_lda_ridge.csv', index = False)
+
+# Save restults for later calculations.
+if sample:
+
+	# Create dictionary
+	topic_dict = {'id': df_comm1.id}
+	for i in range(doc_topic.shape[1]):
+		topic_dict['topic'+str(i+1)] = doc_topic[:len(df_comm1),i]
+	submit = pd.DataFrame(data=topic_dict)
+	submit.to_csv('./sample/train_topic_dist_n_' + str(n_topics) + '.csv', index = False)
+
+	topic_dict = {'id':df_comm2.id}
+	for i in range(doc_topic.shape[1]):
+		topic_dict['topic'+str(i+1)] = doc_topic[len(df_comm1):,i]
+	submit = pd.DataFrame(data=topic_dict)
+	submit.to_csv('./sample/test_topic_dist_n_' + str(n_topics) + '.csv', index = False)
+
+else:
+
+	# Create dictionary
+	topic_dict = {'id': df_comm1.id}
+	for i in range(doc_topic.shape[1]):
+		topic_dict['topic'+str(i+1)] = doc_topic[:len(df_comm1),i]
+	submit = pd.DataFrame(data=topic_dict)
+	submit.to_csv('./data/train_topic_dist_n_' + str(n_topics) + '.csv', index = False)
+
+	topic_dict = {'id':df_comm2.id}
+	for i in range(doc_topic.shape[1]):
+		topic_dict['topic'+str(i+1)] = doc_topic[len(df_comm1):,i]
+	submit = pd.DataFrame(data=topic_dict)
+	submit.to_csv('./data/test_topic_dist_n_' + str(n_topics) + '.csv', index = False)
+
+
+
