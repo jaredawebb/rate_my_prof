@@ -15,6 +15,7 @@
 import pandas as pd
 import numpy as np
 from textblob import TextBlob
+from scipy.sparse import vstack
 
 from sklearn import linear_model, cross_validation
 from sklearn.feature_extraction.text import ENGLISH_STOP_WORDS, CountVectorizer
@@ -25,6 +26,11 @@ np.random.seed(0)
 # Load in the data - pandas DataFrame objects
 rats_tr = pd.read_csv('data/newtrain.csv')
 rats_te = pd.read_csv('data/newtest.csv')
+
+# Construct sparse features
+feats = rats_tr[['profgender', 'profhotness', 'online']].fillna(-1)
+sparse_feats = feats.to_sparse()
+del feats
 
 # Construct bigram representation
 count_vect = CountVectorizer(min_df=10,stop_words=ENGLISH_STOP_WORDS,ngram_range=(1,2))
@@ -38,7 +44,7 @@ for comment in rats_te['comments'].tolist():
 	count += 1
 
 # "Fit" the transformation on the training set and apply to test
-Xtrain = count_vect.fit_transform(rats_tr.comments.fillna(''))
+Xtrain = vstack(sparse_feats, count_vect.fit_transform(rats_tr.comments.fillna('')))
 Xtest = count_vect.transform(rats_te.comments.fillna(''))
 
 Ytrain = np.ravel(rats_tr.quality)
@@ -67,6 +73,8 @@ for i in range(len(alphas)):
     mseTr[i] = mean_squared_error(YhatTr, Ytr)
     mseVal[i] = mean_squared_error(YhatVal, Yval)
 
+print(mseTr)
+print(mseVal)
 '''
 import matplotlib.pyplot as plt
 plt.semilogx(alphas, mseTr, hold=True)
