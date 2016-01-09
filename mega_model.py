@@ -90,8 +90,8 @@ def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 	clf = GridSearchCV(m, parameters, cv=2, error_score=0, verbose=1)
 	clf.fit(Xtrain, Ytrain)
 	Yhat = clf.predict(Xtest)
-	print("Done in %1.2f seconds" % float(time() - t0))
-	print("Score: %1.2f\n" % mse(Yhat, Ytest))
+	print("\tDone in %1.2f seconds" % float(time() - t0))
+	print("\tScore: %1.2f\n" % mse(Yhat, Ytest))
 
 	print("Best Parameters" + str(clf.best_params_))
 	print("Writing Solution")
