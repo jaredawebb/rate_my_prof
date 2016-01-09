@@ -51,7 +51,9 @@ test_ids = pd.read_csv(test, usecols=['id'])
 
 print("Transforming Data\n")
 # Transform comment data
-tfidfvectorizer = TfidfVectorizer(min_df=1, max_df=100, ngram_range=(1,2))
+# tfidfvectorizer = TfidfVectorizer(min_df=120, ngram_range=(1,2))
+tfidfvectorizer = TfidfVectorizer(min_df=120, ngram_range=(1,2))
+
 comm_train = tfidfvectorizer.fit_transform(comments_df['comments'].fillna(''))
 comm_test = tfidfvectorizer.transform(test_comments_df['comments'].fillna(''))
 
@@ -87,9 +89,9 @@ def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 
 	clf = GridSearchCV(m, parameters, cv=2, error_score=0, verbose=1)
 	clf.fit(Xtrain, Ytrain)
-	yhat_ri = clf.predict(Xtest)
+	Yhat = clf.predict(Xtest)
 	print("Done in %1.2f seconds" % float(time() - t0))
-	print("Score: %1.2f\n" % mse(yhat, Ytest))
+	print("Score: %1.2f\n" % mse(Yhat, Ytest))
 
 	print("Best Parameters" + str(clf.best_params_))
 	print("Writing Solution")

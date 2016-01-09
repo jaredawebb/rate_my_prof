@@ -56,17 +56,18 @@ alphas = np.power(10.0, np.arange(-2, 8))
 # Store MSEs here for plotting
 mseTr = np.zeros((len(alphas),))
 mseVal = np.zeros((len(alphas),))
-'''
+
 # Search for lowest validation accuracy
 for i in range(len(alphas)):
-    #print("alpha =", alphas[i])
+    print("alpha =", alphas[i])
     m = linear_model.Ridge(alpha = alphas[i]) 
     m.fit(Xtr, Ytr)
     YhatTr = m.predict(Xtr)
     YhatVal = m.predict(Xval)
     mseTr[i] = mean_squared_error(YhatTr, Ytr)
     mseVal[i] = mean_squared_error(YhatVal, Yval)
-'''
+print(mseTr)
+print(mseVal)
 
 '''
 import matplotlib.pyplot as plt
@@ -82,7 +83,7 @@ plt.show()
 m = linear_model.Ridge(alpha = 100)
 m.fit(Xtrain, Ytrain)
 Yhat = m.predict(Xtest)
-
+'''
 # SGD Classifier
 m1 = linear_model.SGDRegressor(alpha=0.0001, average=False, epsilon=0.1,
        eta0=0.0, fit_intercept=True, l1_ratio=0.15,
@@ -102,7 +103,7 @@ m1 = linear_model.SGDRegressor(alpha=0.0001, average=False, epsilon=0.1,
 
 m1.fit(Xtrain, Ytrain)
 Yhat1 = m1.predict(Xtest)
-
+'''
 
 # Fix Yhat. Try this first. Compare to normalizing
 for i in range(len(Yhat)):
@@ -116,6 +117,7 @@ for i in range(len(Yhat)):
 		Yhat1[i] = 2
 
 # Account for sentiment/prediction mismatch.
+'''
 count = 0
 for i in range(len(Yhat)):
 	if Yhat[i] > 6 and sentiments[i] < -0.5:
@@ -129,7 +131,7 @@ submit.to_csv('crossvalidation_submit.csv', index = False)
 submit = pd.DataFrame(data={'id': rats_te.id, 'quality': Yhat1})
 submit.to_csv('sgd.csv', index = False)
 
-
+'''
 
 # Other things to try:
 # Add other features
