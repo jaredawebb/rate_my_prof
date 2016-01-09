@@ -109,30 +109,30 @@ if mod == 2:
 	run_grid_search(m, parameters, params, 'Lasso', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 3:
-	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), l1_ratio:np.arange(0,1.05,0.05),
+	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'l1_ratio':np.arange(0,1.05,0.05),
 					'normalize':[True, False], 'positive':[True, False],
 					'selection':['random', 'cyclic']}
 	m = ElasticNet()
-	run_grid_search(m, parameters, params, 'ElasticNet', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'ElasticNet', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 4:
 	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'normalize':[True, False],
 					'selection':['random', 'cyclic']}
 
 	m = MultiTaskLasso()
-	run_grid_search(m, parameters, params, 'MultiTaskLasso', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'MultiTaskLasso', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 5:
 	# Lars
 	parameters = {'positive':[True, False], 'normalize':[True, False], 'n_nonzero_coefs':[10,25,50,150,500,np.inf]}
 	m = Lars()
-	run_grid_search(m, parameters, params, 'Lars', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'Lars', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 6:
 	# LarsLasso
 	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'positve':[True, False], 'normalize':[True, False]}
 	m = LarsLasso()
-	run_grid_search(m, parameters, params, 'LarsLasso', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'LarsLasso', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 7:
 	# BayesianRidge
@@ -140,7 +140,7 @@ if mod == 7:
 					'lambda_1':np.power(10.0, np.arange(-9,-3)), 'lambda_2':np.power(10.0, np.arange(-9,-3)),
 					'compute_score':[True,False], 'normalize':[True,False]}
 	m = BayesianRidge()
-	run_grid_search(m, parameters, params, 'BayesianRidge', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'BayesianRidge', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 8:
 	# ARDRegression
@@ -148,14 +148,14 @@ if mod == 8:
 					'lambda_1':np.power(10.0, np.arange(-9,-3)), 'lambda_2':np.power(10.0, np.arange(-9,-3)),
 					'compute_score':[True,False], 'normalize':[True,False], 'threshold_lambda':np.power(10.0, np.arange(2,6))}
 	m = ARDRegressor()
-	run_grid_search(m, parameters, params, 'ARDRegressor', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'ARDRegressor', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 9:
 	# LogisticRegression
 	parameters = {'penalty':['l1', 'l2'], 'C':np.power(10.0, np.arange(-4,-1)), 'class_weight':[None,'balanced'],
 					'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag'], 'multiclass':['ovr', 'multinomial']}
 	m = LogisticRegression()
-	run_grid_search(m, parameters, params, 'LogisticRegression', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'LogisticRegression', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 10:
 	# SGDRegressor
@@ -163,21 +163,21 @@ if mod == 10:
 					'alpha':np.power(10.0, np.arange(-4,5)), 'l1_ratio':[0.1, 0.2, 0.3, 0.4, 0.5], 'shuffle':[True, False], 'epsilon':0.00001,
 					'learning_rate':['constant', 'invscaling'], 'eta0':[0.0001, 0.001, 0.01, 0.1]}
 	m = SGDRegressor()
-	run_grid_search(m, parameters, params, 'SGDRegressor', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'SGDRegressor', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 11:
 	# Perceptron
 	parameters = {'penalty':['l2', 'l1', 'elasticnet'], 'alpha':np.power(10.0, np.arange(-4,5)), 'shuffle':[True, False], 'eta0':np.power(10, np.arange(-1,5)),
 					'class_weight':['balanced', 'none']}
 	m = Perceptron()
-	run_grid_search(m, parameters, params, 'Perceptron', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'Perceptron', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 12:
 	# PassiveAgressiveLearner
 	parameters = {'C':np.power(10.0, np.arange(-3,3)), 'epsilon':np.power(10.0, np.arange(-4,-1)), 'shuffle':[True, False]}
 
 	m = PassiveAgressiveLearner()
-	run_grid_search(m, parameters, params, 'PassiveAgressiveLearner', Xtrain, Ytain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'PassiveAgressiveLearner', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 13:
 	print('=' * 80)
@@ -193,10 +193,5 @@ if mod == 13:
 	print("Writing Solution")
 	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
 	submit.to_csv('./submissions/LinearRegression.csv', index = False)
-
-
-
-
-
 
 
