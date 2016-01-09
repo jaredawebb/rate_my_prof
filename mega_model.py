@@ -174,10 +174,10 @@ if mod == 11:
 	run_grid_search(m, parameters, params, 'Perceptron', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 12:
-	# PassiveAgressiveLearner
+	# PassiveAgressiveRegressor
 	parameters = {'C':np.power(10.0, np.arange(-3,3)), 'epsilon':np.power(10.0, np.arange(-4,-1)), 'shuffle':[True, False]}
 
-	m = PassiveAgressiveLearner()
+	m = PassiveAgressiveRegressor()
 	run_grid_search(m, parameters, params, 'PassiveAgressiveLearner', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 13:
