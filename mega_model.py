@@ -168,7 +168,7 @@ if mod == 10:
 if mod == 11:
 	# Perceptron
 	parameters = {'penalty':['l2', 'l1', 'elasticnet'], 'alpha':np.power(10.0, np.arange(-4,5)), 'shuffle':[True, False], 'eta0':np.power(10.0, np.arange(-1,5)),
-					'class_weight':['balanced', 'none']}
+					'class_weight':['auto', None]}
 	m = Perceptron()
 	run_grid_search(m, parameters, params, 'Perceptron', Xtrain, Ytrain, Xtest, Ytest)
 
