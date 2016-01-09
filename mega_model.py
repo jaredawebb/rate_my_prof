@@ -45,9 +45,8 @@ Xtest = sp.hstack((sp.csr_matrix(test_category_df.values), comm_test))
 Ytrain = np.ravel(quality_df['quality'])
 Ytest = np.ravel(test_quality_df['quality'])
 Xtr, Xte, Ytr, Yte = train_test_split(Xtrain, Ytrain,test_size=.25, random_state=0)
-
 # Train Models.
-
+'''
 print('=' * 80)
 print("Training Least Squares Model")
 print('=' * 80)
@@ -58,44 +57,50 @@ m.fit(Xtrain, Ytrain)
 yhat_lr = m.predict(Xtest)
 print("Done in %1.2f seconds" % float(time() - t0))
 print("Score: %1.2f" % mse(yhat_lr, Ytest))
-
+'''
 params = {}
 
-def run_grid_search(m, parameters, params, name, comm_train, Ytrain, comm_test, Ytest):
+def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 	print('=' * 80)
 	print("Training %s Model" % name)
 	print('=' * 80)
 	t0 = time()
 
-	clf = GridSearchCV(m, parameters, cv=5, n_jobs=-1, error_score=0)
+	clf = GridSearchCV(m, parameters, cv=3, n_jobs=-1, verbose=3, error_score=0)
 	clf.fit(Xtrain, Ytrain)
 	yhat_ri = clf.predict(Xtest)
 	params[name] = clf.best_params_
 	print("Done in %1.2f seconds" % float(time() - t0))
-	print("Score: %1.2f" % mse(yhat_lr, Ytest))
+	print("Score: %1.2f" % mse(yhat_ri, Ytest))
+	print("Best Parameters: " + str(clf.best_params_))
 
 
-parameters = {'alpha': np.power(10, np.arange(-4,5)), 'normalize':[True, False],
-				'solver':['auto','svd','cholesky','lsqr','sparse_cg','sag'],
-				'tol': np.power(10, np.arange(-7,-1))}
+parameters = {'alpha': np.power(10.0, np.arange(-4,5))}#, 'normalize':[True, False],
+#				'solver':['auto','svd','cholesky','lsqr','sparse_cg','sag'],
+#				'tol': np.power(10.0, np.arange(-7,-1))}
 
-m = Ridge()
-run_grid_search(m, parameters, params, 'Ridge', comm_train, Ytrain, comm_test, Ytest)
+#m = Ridge()
+#run_grid_search(m, parameters, params, 'Ridge', comm_train, Ytrain, comm_test, Ytest)
 
+m = Ridge(alpha=100)
+m.fit(comm_train, Ytrain)
+yhat_ri = m.predict(comm_test)
+print("Score: %1.2f" % mse(yhat_ri, Ytest))
 
-parameters = {'alpha':np.power(10, np.arange(-4,5)), 'normalize':[True, False],
-				'tol': np.power(10, nparange(-7,-1)), 'positive':[True, False],
+'''
+parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'normalize':[True, False],
+				'tol': np.power(10.0, nparange(-7,-1)), 'positive':[True, False],
 				'selection':['random', 'cyclic']}
 
 m = Lasso()
 run_grid_search(m, parameters, params, 'Lasso', Xtrain, Ytrain, Xtest, Ytest)
 
-parameters = {'alpha':np.power(10, np.arange(-4,5)), l1_ratio:np.arange(0,1.05,0.05),
-				'normalize':[True, False], 'tol':np.power(10, np.arange(-7,-1)), 'positive':[True, False],
+parameters = {'alpha':np.power(10.0, np.arange(-4,5)), l1_ratio:np.arange(0,1.05,0.05),
+				'normalize':[True, False], 'tol':np.power(10.0, np.arange(-7,-1)), 'positive':[True, False],
 				'selection':['random', 'cylcic']}
 m = ElasticNet()
 run_grid_search(m, parameters, params, 'ElasticNet', Xtrain, Ytain, Xtest, Ytest)
-
+'''
 
 
 
