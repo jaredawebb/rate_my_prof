@@ -75,7 +75,7 @@ def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 	print('=' * 80)
 	t0 = time()
 
-	clf = GridSearchCV(m, parameters, cv=3, n_jobs=-1, verbose=3, error_score=0)
+	clf = GridSearchCV(m, parameters, cv=3, n_jobs=8, verbose=3, error_score=0)
 	clf.fit(Xtrain, Ytrain)
 	Yhat = clf.predict(Xtest)
 	print("\tDone in %1.2f seconds" % float(time() - t0))
