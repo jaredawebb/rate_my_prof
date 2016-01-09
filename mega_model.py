@@ -65,18 +65,6 @@ Xtr, Xte, Ytr, Yte = train_test_split(Xtrain, Ytrain,test_size=.25, random_state
 
 ids = test_ids.id 
 # Train Models.
-'''
-print('=' * 80)
-print("Training Least Squares Model")
-print('=' * 80)
-t0 = time()
-
-m = LinearRegression()
-m.fit(Xtrain, Ytrain)
-yhat_lr = m.predict(Xtest)
-print("Done in %1.2f seconds" % float(time() - t0))
-print("Score: %1.2f" % mse(yhat_lr, Ytest))
-'''
 params = {}
 
 def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
@@ -188,6 +176,21 @@ if mod == 12:
 
 	m = PassiveAgressiveLearner()
 	run_grid_search(m, parameters, params, 'PassiveAgressiveLearner', Xtrain, Ytain, Xtest, Ytest)
+
+if mod == 13:
+	print('=' * 80)
+	print("Training Least Squares Model")
+	print('=' * 80)
+	t0 = time()
+
+	m = LinearRegression()
+	m.fit(Xtrain, Ytrain)
+	yhat_lr = m.predict(Xtest)
+	print("Done in %1.2f seconds" % float(time() - t0))
+	print("Score: %1.2f" % mse(yhat_lr, Ytest))
+	print("Writing Solution")
+	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
+	submit.to_csv('./submissions/LinearRegression.csv', index = False)
 
 
 
