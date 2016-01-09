@@ -129,9 +129,9 @@ if mod == 5:
 	run_grid_search(m, parameters, params, 'Lars', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 6:
-	# LarsLasso
+	# LassoLars
 	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'positve':[True, False], 'normalize':[True, False]}
-	m = LarsLasso()
+	m = LassoLars()
 	run_grid_search(m, parameters, params, 'LarsLasso', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 7:
