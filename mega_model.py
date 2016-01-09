@@ -153,7 +153,7 @@ if mod == 8:
 if mod == 9:
 	# LogisticRegression
 	parameters = {'penalty':['l1', 'l2'], 'C':np.power(10.0, np.arange(-4,-1)), 'class_weight':[None,'balanced'],
-					'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag'], 'multiclass':['ovr', 'multinomial']}
+					'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag'], 'multi_class':['ovr', 'multinomial']}
 	m = LogisticRegression()
 	run_grid_search(m, parameters, params, 'LogisticRegression', Xtrain, Ytrain, Xtest, Ytest)
 
