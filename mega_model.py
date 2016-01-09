@@ -124,7 +124,7 @@ if mod == 4:
 
 if mod == 5:
 	# Lars
-	parameters = {'positive':[True, False], 'normalize':[True, False], 'n_nonzero_coefs':[10,25,50,150,500,np.inf]}
+	parameters = {'normalize':[True, False], 'n_nonzero_coefs':[10,25,50,150,500,np.inf]}
 	m = Lars()
 	run_grid_search(m, parameters, params, 'Lars', Xtrain, Ytrain, Xtest, Ytest)
 
