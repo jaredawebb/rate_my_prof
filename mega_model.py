@@ -187,9 +187,9 @@ if mod == 13:
 
 	m = LinearRegression()
 	m.fit(Xtrain, Ytrain)
-	yhat_lr = m.predict(Xtest)
+	Yhat = m.predict(Xtest)
 	print("Done in %1.2f seconds" % float(time() - t0))
-	print("Score: %1.2f" % mse(yhat_lr, Ytest))
+	print("Score: %1.2f" % mse(Yhat, Ytest))
 	print("Writing Solution")
 	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
 	submit.to_csv('./submissions/LinearRegression.csv', index = False)
