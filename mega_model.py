@@ -177,7 +177,7 @@ if mod == 12:
 	# PassiveAgressiveRegressor
 	parameters = {'C':np.power(10.0, np.arange(-3,3)), 'epsilon':np.power(10.0, np.arange(-4,-1)), 'shuffle':[True, False]}
 
-	m = PassiveAgressiveRegressor()
+	m =	PassiveAggressiveRegressor
 	run_grid_search(m, parameters, params, 'PassiveAgressiveLearner', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 13:
