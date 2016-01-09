@@ -147,7 +147,7 @@ if mod == 8:
 	parameters = {'alpha_1':np.power(10.0, np.arange(-9,-3)), 'alpha_2':np.power(10.0, np.arange(-9,-3)), 
 					'lambda_1':np.power(10.0, np.arange(-9,-3)), 'lambda_2':np.power(10.0, np.arange(-9,-3)),
 					'compute_score':[True,False], 'normalize':[True,False], 'threshold_lambda':np.power(10.0, np.arange(2,6))}
-	m = ARDRegressor()
+	m = ARDRegression()
 	run_grid_search(m, parameters, params, 'ARDRegressor', Xtrain, Ytrain, Xtest, Ytest)
 
 if mod == 9:
