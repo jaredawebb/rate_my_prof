@@ -160,7 +160,7 @@ if mod == 9:
 if mod == 10:
 	# SGDRegressor
 	parameters = {'loss':['squared_loss', 'huber', 'epsilon_insensitive', 'squared_epsilon_insensitive'], 'penalty':[None, 'l1', 'l2', 'elasticnet'],
-					'alpha':np.power(10.0, np.arange(-4,5)), 'l1_ratio':[0.1, 0.2, 0.3, 0.4, 0.5], 'shuffle':[True, False], 'epsilon':0.00001,
+					'alpha':np.power(10.0, np.arange(-4,5)), 'l1_ratio':[0.1, 0.2, 0.3, 0.4, 0.5], 'shuffle':[True, False], 'epsilon':[0.00001],
 					'learning_rate':['constant', 'invscaling'], 'eta0':[0.0001, 0.001, 0.01, 0.1]}
 	m = SGDRegressor()
 	run_grid_search(m, parameters, params, 'SGDRegressor', Xtrain, Ytrain, Xtest, Ytest)
