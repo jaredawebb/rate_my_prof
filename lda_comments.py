@@ -60,17 +60,18 @@ model = lda.LDA(n_topics=n_topics, n_iter=50, random_state = 1)
 model = model.fit(cv_comm)
 
 # print most likely words in each topic distributions.
+'''
 n_top_words = 8
 vocab = np.array(count_vec.get_feature_names())
 topic_word = model.topic_word_
 for i, topic_dist in enumerate(topic_word):
 	topic_words = vocab[np.argsort(topic_dist)][:-(n_top_words+1):-1]
 	print('Topic {}: {}'.format(i, ' '.join(topic_words)))
-
+'''
 ##########################################################
 # Train a ridge regression with the topic distributions. #
 ##########################################################
-
+'''
 print('Training Ridge Regression')
 Ytrain = pd.read_csv(datafile1, usecols=['quality'])  # We want to train against quality
 
@@ -124,7 +125,7 @@ for i, topic_dist in enumerate(topic_word[df.topics[-5:]]):
 # Save results in kaggle format
 submit = pd.DataFrame(data={'id': df_comm2.id, 'quality': np.ravel(Yhat)})
 submit.to_csv('./submissions/submit_lda_ridge.csv', index = False)
-
+'''
 # Save restults for later calculations.
 if sample:
 
