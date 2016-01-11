@@ -120,35 +120,35 @@ if mod == 4:
 					'selection':['random', 'cyclic']}
 
 	m = MultiTaskLasso()
-	run_grid_search(m, parameters, params, 'MultiTaskLasso', Xtrain, Ytrain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'MultiTaskLasso', Xtrain.toarray(), Ytrain, Xtest.toarray(), Ytest)
 
 if mod == 5:
 	# Lars
 	parameters = {'normalize':[True, False], 'n_nonzero_coefs':[10,25,50,150,500,np.inf]}
 	m = Lars()
-	run_grid_search(m, parameters, params, 'Lars', Xtrain, Ytrain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'Lars', Xtrain.toarray(), Ytrain, Xtest.toarray(), Ytest)
 
 if mod == 6:
 	# LassoLars
 	parameters = {'alpha':np.power(10.0, np.arange(-4,5)), 'normalize':[True, False]}
 	m = LassoLars()
-	run_grid_search(m, parameters, params, 'LarsLasso', Xtrain, Ytrain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'LarsLasso', Xtrain.toarray(), Ytrain, Xtest.toarray(), Ytest)
 
 if mod == 7:
 	# BayesianRidge
-	parameters = {'alpha_1':np.power(10.0, np.arange(-9,-3)), 'alpha_2':np.power(10.0, np.arange(-9,-3)), 
-					'lambda_1':np.power(10.0, np.arange(-9,-3)), 'lambda_2':np.power(10.0, np.arange(-9,-3)),
+	parameters = {'alpha_1':np.power(10.0, np.arange(-5,-3)), 'alpha_2':np.power(10.0, np.arange(-5,-3)), 
+					'lambda_1':np.power(10.0, np.arange(-5,-3)), 'lambda_2':np.power(10.0, np.arange(-5,-3)),
 					'compute_score':[True,False], 'normalize':[True,False]}
 	m = BayesianRidge()
-	run_grid_search(m, parameters, params, 'BayesianRidge', Xtrain, Ytrain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'BayesianRidge', Xtrain.toarray(), Ytrain, Xtest.toarray(), Ytest)
 
 if mod == 8:
 	# ARDRegression
-	parameters = {'alpha_1':np.power(10.0, np.arange(-9,-3)), 'alpha_2':np.power(10.0, np.arange(-9,-3)), 
-					'lambda_1':np.power(10.0, np.arange(-9,-3)), 'lambda_2':np.power(10.0, np.arange(-9,-3)),
-					'compute_score':[True,False], 'normalize':[True,False], 'threshold_lambda':np.power(10.0, np.arange(2,6))}
+	parameters = {'alpha_1':np.power(10.0, np.arange(-5,-3)), 'alpha_2':np.power(10.0, np.arange(-5,-3)), 
+					'lambda_1':np.power(10.0, np.arange(-5,-3)), 'lambda_2':np.power(10.0, np.arange(-5,-3)),
+					'compute_score':[True,False], 'normalize':[True,False], 'threshold_lambda':np.power(10.0, np.arange(2,5))}
 	m = ARDRegression()
-	run_grid_search(m, parameters, params, 'ARDRegressor', Xtrain, Ytrain, Xtest, Ytest)
+	run_grid_search(m, parameters, params, 'ARDRegressor', Xtrain.toarray(), Ytrain, Xtest.toarray(), Ytest)
 
 if mod == 9:
 	# LogisticRegression
