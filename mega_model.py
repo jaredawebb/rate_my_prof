@@ -4,6 +4,7 @@ print("Importing Libraries")
 import numpy as np
 import scipy.sparse as sp
 import pandas as pd
+import textblob
 from sklearn.grid_search import GridSearchCV
 from sklearn.grid_search import GridSearchCV # Do this for now.  Once this is working, switch to random.
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -32,20 +33,31 @@ mod = int(sys.argv[1])
 
 print("Loading Data")
 # Load Data sets.
+'''
 train = './sample/sample_train.csv'
 test = './sample/sample_test.csv'
+'''
+train = './data/newtrain.csv'
+test = './data/newtest.csv'
+
+train_sent = './data/newtrain_sentiments.csv'
+test_sent = './data/newtest_sentiments.csv'
 
 comments_df = pd.read_csv(train, usecols=['comments'])
 category_df = pd.read_csv(train)
 category_df.drop(['quality', 'clarity', 'helpfulness', 'comments', 'id','tid'], axis=1, inplace=True)
 category_df.fillna(-1, inplace=True)
 quality_df = pd.read_csv(train, usecols=['quality'])
+sentiment_df = pd.read_csv(train_sent)
+
 
 test_comments_df = pd.read_csv(test, usecols=['comments'])
 test_category_df = pd.read_csv(test)
-test_category_df.drop(['quality', 'clarity', 'helpfulness', 'comments', 'id','tid'], axis=1, inplace=True)
+test_category_df.drop(['comments', 'id', 'tid'], axis=1, inplace=True)
+# test_category_df.drop(['quality', 'clarity', 'helpfulness', 'comments', 'id','tid'], axis=1, inplace=True)
 test_category_df.fillna(-1, inplace=True)
-test_quality_df = pd.read_csv(test, usecols=['quality'])
+# test_quality_df = pd.read_csv(test, usecols=['quality'])
+test_sentiment_df = pd.read_csv(test_sent)
 
 test_ids = pd.read_csv(test, usecols=['id'])
 
@@ -60,7 +72,12 @@ comm_test = tfidfvectorizer.transform(test_comments_df['comments'].fillna(''))
 # Stack feature and comment data, train_test_split
 feat_train = category_df.values
 Xtrain = sp.hstack((sp.csr_matrix(category_df.values), comm_train))
+Xtrain = sp.hstack((Xtrain, sp.csr_matrix(sentiment_df[['polarity', 'subjectivity']].values)))
+
 Xtest = sp.hstack((sp.csr_matrix(test_category_df.values), comm_test))
+print(Xtest.shape, test_sentiment_df.shape)
+Xtest = sp.hstack((Xtest, sp.csr_matrix(test_sentiment_df[['polarity', 'subjectivity']].values)))
+
 Ytrain = np.ravel(quality_df['quality'])
 Ytest = np.ravel(test_quality_df['quality'])
 Xtr, Xte, Ytr, Yte = train_test_split(Xtrain, Ytrain,test_size=.25, random_state=0)

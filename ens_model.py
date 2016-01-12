@@ -9,19 +9,24 @@ from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet, Log
 
 print("Loading Data")
 train = './data/newtrain.csv'
+train_sent = './data/newtrain_sentiment.csv'
 test = './data/newtest.csv'
+test_sent = './data/newtest_sentiment.csv'
 
 comments_df = pd.read_csv(train, usecols=['comments'])
 category_df = pd.read_csv(train)
 category_df.drop(['quality', 'clarity','easiness', 'helpfulness', 'comments', 'id','tid'], axis=1, inplace=True)
 category_df.fillna(-1, inplace=True)
 quality_df = pd.read_csv(train, usecols=['quality'])
+sent_df = pd.read_csv(train_sent)
+
 
 test_comments_df = pd.read_csv(test, usecols=['comments'])
 test_category_df = pd.read_csv(test)
 test_category_df.drop(['id','tid', 'comments'], axis=1, inplace=True)
 test_category_df.fillna(-1, inplace=True)
 #test_quality_df = pd.read_csv(test, usecols=['quality'])
+test_sent_df = pd.read_csv(test_sent)
 
 test_ids = pd.read_csv(test, usecols=['id'])
 
@@ -34,7 +39,10 @@ comm_test = tfidfvectorizer.transform(test_comments_df['comments'].fillna(''))
 # Stack feature and comment data, train_test_split
 feat_train = category_df.values
 Xtrain = sp.hstack((sp.coo_matrix(category_df.values), comm_train))
+Xtrain = sp.hstack((Xtrain, sp.csr_matrix(sent_df[['polarity', 'subjectivity']].values)))
+
 Xtest = sp.hstack((sp.coo_matrix(test_category_df.values), comm_test))
+Xtest = sp.hstack((Xtest, sp.csr_matrix(test_sent_df[['polarity', 'subjectivity']].values)))
 Ytrain = np.ravel(quality_df['quality'])
 #Ytest = np.ravel(test_quality_df['quality'])
 Xtr, Xte, Ytr, Yte = train_test_split(Xtrain, Ytrain,test_size=.25, random_state=0)
