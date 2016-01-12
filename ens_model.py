@@ -69,9 +69,11 @@ for i in range(len(models)):
 	y = models[i].predict(Xtest)
 	X[:,i] = np.ravel(y)
 	Xt[:,i] = models[i].predict(Xtr)
+	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
+	submit.to_csv('./submissions/ensemble_m_'+str(i)+'.csv', index = False)
+
 
 Xtr, Xte, Ytr, Yte = train_test_split(Xt, Ytr, test_size=.15)
-
 m = LinearRegression()
 m.fit(Xtr,Ytr)
 yhat = m.predict(Xte)
