@@ -55,7 +55,7 @@ picke.dump(count_vec.get_feature_names(), open(datafile[:-4] + '_feature_names.p
 
 # Use LDA to find topic distributions in comments.
 print('Running LDA')
-n_topics=150
+n_topics=50
 model = lda.LDA(n_topics=n_topics, n_iter=50, random_state = 1)
 model = model.fit(cv_comm)
 
@@ -77,8 +77,9 @@ Ytrain = pd.read_csv(datafile1, usecols=['quality'])  # We want to train against
 
 cl = sklearn.linear_model.Ridge()
 # These are the topic disributions for each comment.
+'''
 doc_topic = model.doc_topic_
-
+'''
 # Fit on the training set.
 f_data = pd.read_csv('./data/newtrain.csv')
 f_data.drop(['id', 'tid', 'helpfulness', 'clarity', 'easiness','comments', 'quality'], axis=1, inplace=True)

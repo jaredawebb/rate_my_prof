@@ -60,7 +60,8 @@ X = np.zeros(len(y1), 5)
 for i in range(len(models)):
 	y = models[i].predict(Xtest)
 	X[:,i] = np.ravel(y)
-
+	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
+	submit.to_csv('./submissions/ensemble_m_'+str(i)+'.csv', index = False)
 
 m = LinearRegression
 Xtr, Xte, Ytr, Yte = train_test_split(X, Ytrain, test_size=.25)
