@@ -27,7 +27,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDRegressor
 from sklearn.linear_model import Perceptron
 from sklearn.linear_model import PassiveAggressiveRegressor
-
+import xgboost as xgb
 mod = int(sys.argv[1])
 
 print("Loading Data")
@@ -75,7 +75,7 @@ def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 	print('=' * 80)
 	t0 = time()
 
-	clf = GridSearchCV(m, parameters, cv=3, n_jobs=8, verbose=3, error_score=0)
+	clf = GridSearchCV(m, parameters, cv=3, n_jobs=4, verbose=3, error_score=0)
 	clf.fit(Xtrain, Ytrain)
 	Yhat = clf.predict(Xtest)
 	print("\tDone in %1.2f seconds" % float(time() - t0))
@@ -194,4 +194,10 @@ if mod == 13:
 	submit = pd.DataFrame(data={'id': ids, 'quality': Yhat})
 	submit.to_csv('./submissions/LinearRegression.csv', index = False)
 
-
+if mod == 14:
+	parameters = {'max_depth':np.arange(9,12), 'n_estimators':[3000], 'learning_rate':np.power(10.0, np.arange(-3,-1)), 'subsample':np.arange(0.25,1.25,0.25)}#,
+#				'colsample_bytree':np.arange(0,1.25, .25), 'gamma':np.arange(0,1.25, .25), 'base_score':[.5, .6, .7], 'seed':[42]}
+	m = xgb.XGBRegressor()
+	#Xtrain = xgb.DMatrix(Xtrain)
+	#Xtest = xgb.DMatrix(Xtest)
+	run_grid_search(m, parameters, params, 'XGBoost', Xtrain, Ytrain, Xtest, Ytest)	
