@@ -5,13 +5,14 @@ import numpy as np
 import scipy.sparse as sp
 import pandas as pd
 import textblob
-from sklearn.grid_search import GridSearchCV
+from sklearn.grid_search import GridSearchCV, RandomizedSearchCV
 from sklearn.grid_search import GridSearchCV # Do this for now.  Once this is working, switch to random.
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import mean_squared_error as mse
 from time import time
 import sys
+import scipy.stats as stats
 
 # Import all regression models.
 
@@ -92,7 +93,7 @@ def run_grid_search(m, parameters, params, name, Xtrain, Ytrain, Xtest, Ytest):
 	print('=' * 80)
 	t0 = time()
 
-	clf = GridSearchCV(m, parameters, cv=3, n_jobs=4, verbose=3, error_score=0)
+	clf = RandomizedSearchCV(m, parameters, cv=3, n_jobs=4, verbose=3, error_score=0)
 	clf.fit(Xtrain, Ytrain)
 	Yhat = clf.predict(Xtest)
 	print("\tDone in %1.2f seconds" % float(time() - t0))
@@ -110,8 +111,8 @@ if mod == 0:
 	print("Static Fire Successful")
 
 if mod == 1:
-	parameters = {'alpha':np.power(10.0, np.arange(-4,-2)), 'normalize':[True, False],
-					'solver':['auto','svd','cholesky','lsqr','sparse_cg','sag'],
+	parameters = {'alpha':stats.uniform(0.0005,0.002), 'normalize':[True, False],
+					'solver':['auto'],
 					}
 
 	m = Ridge()
